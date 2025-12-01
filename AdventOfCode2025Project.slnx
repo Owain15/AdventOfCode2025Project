@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Aoc25.Console/Aoc25.Console.csproj" />
+  <Project Path="AoC25/AoC25.csproj" />
+</Solution>
