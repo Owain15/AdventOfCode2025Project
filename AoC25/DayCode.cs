@@ -82,6 +82,7 @@ namespace AoC25
 						dialIndex--;
 						runningComand++;
 					}
+
 					while (dialIndex < 0 || dialIndex >= 100)
 					{
 						if (dialIndex < 0) { dialIndex += 100; }
@@ -96,6 +97,18 @@ namespace AoC25
 			return zeroCount;
 		}
 
+	}
+
+	public static class Day2
+	{
+		public static int RunPartOne()
+		{
+			return 0;
+		}
+		public static int RunPartTwo()
+		{
+			return 0;
+		}
 	}
 
 
