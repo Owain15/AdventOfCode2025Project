@@ -4,8 +4,8 @@
     {
         internal static List<string> GetTestData(int dayIndex)
         {
-            //validate input ...
-
+			//validate input ...
+			//$(MSBuildProjectName)
 			return System.IO.File.ReadAllLines($"C:\\Users\\ojdav\\source\\repos\\AdventOfCode2025Project\\AoC25\\res\\TestData\\D{dayIndex}.txt").ToList();
 		}
 
