@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="res\Prompt\" />
     <Folder Include="res\Data\" />
     <Folder Include="res\TestData\" />
   </ItemGroup>
