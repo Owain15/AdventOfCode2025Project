@@ -1,11 +1,11 @@
 ﻿
-Console.WriteLine("Advent Of Code 2025.\n\r\n\r");
 
-//int result = AoC25.Day2.RunPartOne();
-//string result = AoC25.Day2.RunPartTwo();
+int day = 6;
+int part = 2;
+bool test = true;
 
-string result = AoC25.Day4.Run(2,false);
+string result = AoC25.Code.Run(day, part, test);
 
-Console.WriteLine($"Result : {result}");
+Console.WriteLine($"Advent Of Code 2025.\n\r\n\rDay : {day}  Part : {part}\n\rRun test data : {test}\n\r\n\rResult : {result}\n\r\n\r");
 
 Console.ReadKey();
