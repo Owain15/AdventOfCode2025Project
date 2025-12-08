@@ -12,8 +12,8 @@
 				case 4: return Day4.Run(part, runTestData);
 				case 5: return Day5.Run(part, runTestData);
 				case 6: return Day6.Run(part, runTestData);
-				//case 7: return Day7.Run(part, runTestData);
-				//case 8: return Day8.Run(part, runTestData);
+				case 7: return Day7.Run(part, runTestData);
+				case 8: return Day8.Run(part, runTestData);
 				//case 9: return Day9.Run(part, runTestData);
 				//case 10: return Day10.Run(part, runTestData);
 				//case 11: return Day11.Run(part, runTestData);

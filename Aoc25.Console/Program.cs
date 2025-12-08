@@ -1,7 +1,7 @@
 ﻿
 
-int day = 6;
-int part = 2;
+int day = 8;
+int part = 1;
 bool test = true;
 
 string result = AoC25.Code.Run(day, part, test);

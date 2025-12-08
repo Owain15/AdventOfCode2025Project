@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace AoC25
 {
@@ -658,8 +659,12 @@ namespace AoC25
 			.Select(x => x.Split(' '))
 			.ToList();
 
+
+			var colSizeList = new List<double>();
 			var opData = lineData.Last();
-			var colSize = 0;
+
+			while(opData.Count() < input.Last().Replace(" ","").Length )            // - colom count
+			{ opData = opData.Append("").ToArray(); }
 			
 			for(int i = 0; i < opData.Length -1; i++)
 			{
@@ -669,14 +674,21 @@ namespace AoC25
 					{
 						if(opData[j] != "")
 						{
-							colSize = j - i;
+							colSizeList.Add(j - i);
+							i = j -1;
+							break;
+						}
+
+						if(j == opData.Length -1)
+						{ 
+							colSizeList.Add(j - i);
+							i = j;
 							break;
 						}
 					}
 				}
 
-				if(colSize > 0)
-				{ break; }
+		
 
 			}
 
@@ -695,11 +707,11 @@ namespace AoC25
 				for (int j = 0; j < lineData[i].Length; j++)
 				{
 					if (lineData[i][j] == "")
-					{ stringData += "0"; }
+					{ stringData += " "; }
 					else if (double.TryParse(lineData[i][j], out double r))
 					{ stringData += lineData[i][j]; }
 
-					if (stringData.Length == colSize)
+					if (stringData.Length == colSizeList[i])
 					{ 
 						line.Add(stringData);
 						stringData = "";
@@ -718,7 +730,7 @@ namespace AoC25
 			{
 				var colData = new List<double>();
 
-				for (int charIndex = colSize -1; charIndex >= 0; charIndex--)
+				for (int charIndex = (int)colSizeList[stringIndex] -1; charIndex >= 0; charIndex--)
 				{
 					string cd = ""; 
 					
@@ -748,6 +760,8 @@ namespace AoC25
 			}
 
 			return results.Sum().ToString();
+
+			//Data 81444036920374 x to high 
 
 			//Test Result  3263827
 		}
@@ -780,12 +794,188 @@ namespace AoC25
 		{
 			var input = (runTestData) ? Code.GetTestData(7) : Code.GetData(7);
 
+			////initalize grid
+			//char[,] grid = new char[input.Count-1,input.First().Count()-1];
+
+			//for(int y = 0; y < input.First().Count()-1; y++)
+			//	for(int x = 0; x < input.Count()-1; x++)
+			//	{ grid[x,y] = input[x][y]; }
+
+			//List<(int x, int y)> beamLocations = new List<(int x, int y)> { (input.First().IndexOf('S'),0) };
+
+			if(input.First().IndexOf('S') == -1)
+			{ return " Start location not found."; }
+
+			List<int>beamLocation = new List<int> { input.First().IndexOf('S') };
+
+			int splitCout = 0;
+
+			for(int i = 0; i < input.Count()-1; i++)
+			{
+				List<int> newLocations = new List<int>();
+
+				foreach (var beam in beamLocation)
+				{
+					if(input[i+1][beam] == '^')
+					{
+						splitCout++;
+						newLocations.Add(beam - 1);
+						newLocations.Add(beam + 1);
+					}
+					else
+					{ newLocations.Add(beam); }
+					
+				}
+				
+				beamLocation = newLocations.Distinct().ToList();
+			}
+
+			return splitCout.ToString();
+		}
+		private static string PartTwo(bool runTestData)
+		{
+
+			return "not implemented yet.";
+
+			var input = (runTestData) ? Code.GetTestData(7) : Code.GetData(7);
+
+			if (input.First().IndexOf('S') == -1)
+			{ return " Start location not found."; }
+
+			List<int> beamLocation = new List<int> { input.First().IndexOf('S') };
+
+			int splitCout = 0;
+
+			for (int i = 0; i < input.Count() - 1; i++)
+			{
+				List<int> newLocations = new List<int>();
+
+				foreach (var beam in beamLocation)
+				{
+					if (input[i + 1][beam] == '^')
+					{
+						splitCout++;
+						newLocations.Add(beam - 1);
+						newLocations.Add(beam + 1);
+					}
+					else
+					{ newLocations.Add(beam); }
+
+				}
+
+				beamLocation = newLocations.ToList();
+			}
+
+			return splitCout.ToString();
+		}
+
+
+	}
+
+	public static class Day8
+	{
+		public static string Run(int partIndex)
+		{
+			switch (partIndex)
+			{
+				case 1: return PartOne(false);
+				case 2: return PartTwo(false);
+				default: return "Invalid part index.";
+			}
+		}
+		public static string Run(int partIndex, bool runTestData)
+		{
+			switch (partIndex)
+			{
+				case 1: return PartOne(runTestData);
+				case 2: return PartTwo(runTestData);
+				default: return "Invalid part index.";
+			}
+		}
+
+		private static double CalculateDistance((double x, double y, double z)p1,(double x, double y, double z)p2 )
+		{
+			double deltaX = p2.x - p1.x;
+			double deltaY = p2.y - p1.y;
+			double deltaZ = p2.z - p1.z;
+
+			double distance = Math.Sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
+			
+			return distance;
+		}
+		private struct Box
+		{
+			public double Id { get; }
+			public (double x, double y, double z) Location { get; }
+			public bool IsConnected { get; set; }
+			
+			public Box(double id, (double x, double y, double z)location)
+			{
+				Id = id;
+				Location = location;
+				IsConnected = false;	
+			}
+			
+		}
+
+		private static string PartOne(bool runTestData)
+		{
+
+			var input = (runTestData) ? Code.GetTestData(8) : Code.GetData(8);
+
+			var boxLocations = input
+			.Select(line => line.Split(',')
+			.Select(double.Parse)
+			.ToArray())
+			.Where(p => p.Length == 3)
+			.Select(p => (x: p[0], y: p[1], z: p[2]))
+			.ToList();
+
+			List<Box> boxes = new List<Box>();
+
+			for(int i = 0; i < boxLocations.Count; i++)
+			{ boxes.Add( new Box(i, boxLocations[i]) ); }
+
+
 			return "part one not implemented yet.";
 		}
 		private static string PartTwo(bool runTestData)
 		{
-			var input = (runTestData) ? Code.GetTestData(7) : Code.GetData(7);
+			return "part two not implemented yet.";
+		}
 
+
+	}
+
+	public static class Day9
+	{
+		public static string Run(int partIndex)
+		{
+			switch (partIndex)
+			{
+				case 1: return PartOne(false);
+				case 2: return PartTwo(false);
+				default: return "Invalid part index.";
+			}
+		}
+		public static string Run(int partIndex, bool runTestData)
+		{
+			switch (partIndex)
+			{
+				case 1: return PartOne(runTestData);
+				case 2: return PartTwo(runTestData);
+				default: return "Invalid part index.";
+			}
+		}
+
+		private static string PartOne(bool runTestData)
+		{
+			var input = (runTestData) ? Code.GetTestData(9) : Code.GetData(9);
+
+			return "part one not implemented yet.";
+		}
+		private static string PartTwo(bool runTestData)
+		{
 			return "part two not implemented yet.";
 		}
 
@@ -826,5 +1016,4 @@ namespace AoC25
 
 
 	//}
-
 }
