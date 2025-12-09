@@ -1,5 +1,34 @@
-﻿namespace AoC25
+﻿
+namespace AoC25
 {
+	//public class Aoc25
+	//{
+	//	public string Run(int day, int part, bool test)
+	//	{
+			
+	//		var result = (day == 1) ? new AoC25.Aoc25() ; 
+
+	//		//switch (day)
+	//		//{
+	//		//	//case 1: return Day1.Run(part, runTestData);
+	//		//	//case 2: return Day2.Run(part, runTestData);
+	//		//	case 3: return Day3.Run(part, runTestData);
+	//		//	case 4: return Day4.Run(part, runTestData);
+	//		//	case 5: return Day5.Run(part, runTestData);
+	//		//	case 6: return Day6.Run(part, runTestData);
+	//		//	case 7: return Day7.Run(part, runTestData);
+	//		//	case 8: return Day8.Run(part, runTestData);
+	//		//	//case 9: return Day9.Run(part, runTestData);
+	//		//	//case 10: return Day10.Run(part, runTestData);
+	//		//	//case 11: return Day11.Run(part, runTestData);
+	//		//	//case 12: return Day12.Run(part, runTestData);
+
+	//		//	default: return "Invalid day index.";
+	//		//}
+	//		throw new NotImplementedException();
+	//	}
+
+	//}
 	public static class Code
 	{
 		public static string Run(int day, int part, bool runTestData)
@@ -14,7 +43,7 @@
 				case 6: return Day6.Run(part, runTestData);
 				case 7: return Day7.Run(part, runTestData);
 				case 8: return Day8.Run(part, runTestData);
-				//case 9: return Day9.Run(part, runTestData);
+				case 9: return Day9.Run(part, runTestData);
 				//case 10: return Day10.Run(part, runTestData);
 				//case 11: return Day11.Run(part, runTestData);
 				//case 12: return Day12.Run(part, runTestData);
@@ -56,6 +85,8 @@
 		//	}
 		//}
 
+
+
 		//public class Day : AoC25.Code.IDay
 		//{
 		//	public static string Run(int partIndex)
@@ -90,4 +121,5 @@
 		// }
 		//}
 	}
+
 }

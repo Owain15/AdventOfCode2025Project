@@ -21,25 +21,25 @@ namespace AoC25
 			// unpack input data
 			var commandList = new List<int>();
 
-			for(int i = 0; i < input.Count; i++)
+			for (int i = 0; i < input.Count; i++)
 			{
 				char firstChar = input[i][0];
-				int move = int.Parse(input[i].Substring(1, input[i].Length - 1));  
-				if(firstChar == 'L') { move = - move; }
+				int move = int.Parse(input[i].Substring(1, input[i].Length - 1));
+				if (firstChar == 'L') { move = -move; }
 				commandList.Add(move);
 			}
 			// run inputs
-			foreach(var command in commandList)
+			foreach (var command in commandList)
 			{
 				dialIndex += command;
-				
-				while(dialIndex < 0 || dialIndex >= 100)
+
+				while (dialIndex < 0 || dialIndex >= 100)
 				{
-					if(dialIndex < 0) { dialIndex += 100; }
-					if(dialIndex >= 100) { dialIndex -= 100; }
+					if (dialIndex < 0) { dialIndex += 100; }
+					if (dialIndex >= 100) { dialIndex -= 100; }
 				}
-		
-				if(dialIndex == 0) { zeroCount++; }
+
+				if (dialIndex == 0) { zeroCount++; }
 			}
 
 
@@ -48,7 +48,7 @@ namespace AoC25
 			return zeroCount;
 		}
 
-		public static int RunPartTwo() 
+		public static int RunPartTwo()
 		{
 			int zeroCount = 0;
 			int dialIndex = 50;
@@ -112,9 +112,9 @@ namespace AoC25
 				.First()
 				.Split(',')
 				.Select(x => x.Split('-'))
-				.Select(x => (start: double.Parse( x.First()), finish: double.Parse(x.Last())))
+				.Select(x => (start: double.Parse(x.First()), finish: double.Parse(x.Last())))
 				.ToList();
-			
+
 
 			////Test Inputs
 			//span.Add(("100","102"));
@@ -132,9 +132,9 @@ namespace AoC25
 				for (double i = range.start; i <= range.finish; i++)
 				{
 					string id = i.ToString();
-					int midPoint = id.Length/2;
-	
-					if(id.Length % 2 == 0)
+					int midPoint = id.Length / 2;
+
+					if (id.Length % 2 == 0)
 					{
 						string st1 = id.Substring(0, midPoint);
 						string st2 = id.Substring(midPoint);
@@ -142,7 +142,7 @@ namespace AoC25
 						(string a, string b) part = (st1, st2);
 
 						if (int.Parse(part.a) == int.Parse(part.b))
-						{ invalidIds .Add(double.Parse(id));  }
+						{ invalidIds.Add(double.Parse(id)); }
 					}
 
 				}
@@ -177,9 +177,9 @@ namespace AoC25
 
 			List<double> invalidIds = new List<double>();
 
-			foreach(var range in spans)
+			foreach (var range in spans)
 			{
-				for(double i = range.start; i <= range.finish; i++)
+				for (double i = range.start; i <= range.finish; i++)
 				{
 					string id = i.ToString();
 
@@ -187,14 +187,14 @@ namespace AoC25
 					{
 						(string a, string b) part = (id.Substring(0, partLength), id.Substring(partLength));
 
-						if (part.b.Replace(part.a,"").Length == 0)
+						if (part.b.Replace(part.a, "").Length == 0)
 						{ invalidIds.Add(double.Parse(id)); break; }
 					}
 				}
 			}
 
 			return (invalidIds.Count > 0) ? invalidIds.Sum().ToString() : "not found";
-			 
+
 		}
 	}
 
@@ -259,23 +259,23 @@ namespace AoC25
 			{
 				string bCop = bank;
 				int removeCount = 0;
-			
-				for (int i = 0; i < bCop.Length-1; i++)
-				{ 
-					if(int.Parse(bCop[i].ToString()) < int.Parse(bCop[i+1].ToString()))
+
+				for (int i = 0; i < bCop.Length - 1; i++)
+				{
+					if (int.Parse(bCop[i].ToString()) < int.Parse(bCop[i + 1].ToString()))
 					{
 						bCop = bCop.Remove(i, 1);
-						i=-1;
+						i = -1;
 						removeCount++;
 					}
-					if( removeCount >= 3)
+					if (removeCount >= 3)
 					{
 						jolts.Add(decimal.Parse(bCop));
 						break;
 					}
 				}
 
-				if(removeCount < 3)
+				if (removeCount < 3)
 				{
 					while (removeCount < 3)
 					{
@@ -300,7 +300,7 @@ namespace AoC25
 						if (removeCount >= 3)
 						{
 							jolts.Add(decimal.Parse(bCop));
-							break; 
+							break;
 						}
 
 					}
@@ -309,7 +309,7 @@ namespace AoC25
 				//jolts.Add(double.Parse(bCop));
 
 			}
-	
+
 
 			return jolts.Sum().ToString();
 			//Test result : 3121910778619.
@@ -345,18 +345,18 @@ namespace AoC25
 
 			List<(int x, int y)> paperLocations = new List<(int x, int y)>();
 
-			int[,] grid = new int[ input[0].Length, input.Count ];
+			int[,] grid = new int[input[0].Length, input.Count];
 
-			for(int y = 0; y < input.Count; y ++)
-				for(int x = 0; x < input[y].Length; x ++)
-				{ 	
+			for (int y = 0; y < input.Count; y++)
+				for (int x = 0; x < input[y].Length; x++)
+				{
 					grid[x, y] = (input[y][x] == '@') ? 1 : 0;
-				
-					if(grid[x,y] == 1)
-					{ paperLocations.Add((x,y)); }
+
+					if (grid[x, y] == 1)
+					{ paperLocations.Add((x, y)); }
 				}
 			List<(int x, int y)> adjaentLacations = new List<(int x, int y)> {
-				
+
 					(-1,-1),( 0,-1),( 1,-1),
 					(-1, 0),        ( 1, 0),
 					(-1, 1),( 0, 1),( 1, 1)
@@ -364,23 +364,23 @@ namespace AoC25
 
 			int rollCount = 0;
 
-			foreach(var roll in paperLocations)
+			foreach (var roll in paperLocations)
 			{
 				int adjCount = 0;
-				
-				foreach(var adj in adjaentLacations)
+
+				foreach (var adj in adjaentLacations)
 				{
 					(int x, int y) checkLocation = (roll.x + adj.x, roll.y + adj.y);
-				
-					if(checkLocation.x >= 0 && checkLocation.x < grid.GetLength(0)
+
+					if (checkLocation.x >= 0 && checkLocation.x < grid.GetLength(0)
 					&& checkLocation.y >= 0 && checkLocation.y < grid.GetLength(1))
 					{
-						if(grid[checkLocation.x, checkLocation.y] == 1)
+						if (grid[checkLocation.x, checkLocation.y] == 1)
 						{ adjCount++; }
 					}
 				}
 
-				if(adjCount < 4)
+				if (adjCount < 4)
 				{
 					rollCount++;
 				}
@@ -403,21 +403,21 @@ namespace AoC25
 					grid[x, y] = (input[y][x] == '@') ? 1 : 0;
 
 					if (grid[x, y] == 1)
-					{ paperLocations.Add((x, y,false)); }
+					{ paperLocations.Add((x, y, false)); }
 				}
-			
+
 			List<(int x, int y)> adjaentLacations = new List<(int x, int y)> {
 
 					(-1,-1),( 0,-1),( 1,-1),
 					(-1, 0),        ( 1, 0),
 					(-1, 1),( 0, 1),( 1, 1)
 				};
-			
+
 			int rollCount = 0;
 			int totalRollCount = 0;
 
 			do
-			{	
+			{
 				totalRollCount += rollCount;
 				rollCount = 0;
 
@@ -433,7 +433,7 @@ namespace AoC25
 						&& checkLocation.y >= 0 && checkLocation.y < grid.GetLength(1))
 						{
 							if (grid[checkLocation.x, checkLocation.y] == 1)
-							{ 
+							{
 								adjCount++;
 							}
 						}
@@ -445,12 +445,12 @@ namespace AoC25
 						paperLocations[i] = (paperLocations[i].x, paperLocations[i].y, true);
 					}
 
-				
+
 				}
 
-				for(int i = 0; i < paperLocations.Count; i++)
+				for (int i = 0; i < paperLocations.Count; i++)
 				{
-					if(paperLocations[i].canBeRemoved)
+					if (paperLocations[i].canBeRemoved)
 					{
 						grid[paperLocations[i].x, paperLocations[i].y] = 0;
 
@@ -458,10 +458,10 @@ namespace AoC25
 				}
 
 				paperLocations.RemoveAll(x => x.canBeRemoved);
-				
-			} 
+
+			}
 			while (rollCount > 0);
-		
+
 
 			return totalRollCount.ToString();
 		}
@@ -494,7 +494,7 @@ namespace AoC25
 		{
 			var input = (runTestData) ? Code.GetTestData(5) : Code.GetData(5);
 
-			var ranges  = input
+			var ranges = input
 				.Where(x => x.Contains('-'))
 				.Select(x => x.Split('-'))
 				.Select(x => (start: double.Parse(x.First()), finish: double.Parse(x.Last())))
@@ -507,18 +507,18 @@ namespace AoC25
 
 			int freshIngeadeantCount = 0;
 
-			foreach(var ingredeant in inredeants)
+			foreach (var ingredeant in inredeants)
 			{
-				foreach(var range in ranges)
+				foreach (var range in ranges)
 				{
-					if(ingredeant >= range.start && ingredeant <= range.finish)
+					if (ingredeant >= range.start && ingredeant <= range.finish)
 					{
 						freshIngeadeantCount++;
 						break;
 					}
 				}
 			}
-	
+
 
 			return freshIngeadeantCount.ToString();
 		}
@@ -533,11 +533,11 @@ namespace AoC25
 				.ToList()
 				.OrderBy(x => x.start).ToList();
 
-			
 
-			for(int i = 0; i < ranges.Count-1; i++)
+
+			for (int i = 0; i < ranges.Count - 1; i++)
 			{
-				for(int j = i+ 1; j < ranges.Count; j++)
+				for (int j = i + 1; j < ranges.Count; j++)
 				{
 					//(S2 - S1) < (e1 - s1) || (S1 - S2) < (e2 - s2)
 					//if ((ranges[j].finish - ranges[i].start) < (ranges[j].finish - ranges[i].start) && ( <= ranges[i].start))
@@ -548,21 +548,21 @@ namespace AoC25
 						double nFinish = Math.Max(ranges[i].finish, ranges[j].finish);
 						ranges.RemoveAt(j);
 						ranges.RemoveAt(i);
-						ranges.Add( (nStart,nFinish) );
+						ranges.Add((nStart, nFinish));
 						ranges = ranges.OrderBy(x => x.start).ToList();
 						i--;
 						break;
-					
+
 					}
 				}
 
-		
+
 			}
 
 			List<double> ids = new List<double>();
-			
-			foreach(var range in ranges)
-			{ 
+
+			foreach (var range in ranges)
+			{
 				ids.Add(range.finish - range.start + 1);
 				//for(double i = range.start; i <= range.finish; i++)
 				//{
@@ -610,35 +610,35 @@ namespace AoC25
 			int rowCount = input.Count - 1;
 			int colCount = input[0].Split(' ').Where(x => double.TryParse(x, out double result)).Select(x => double.Parse(x)).ToList().Count;
 
-			double[,]numbers = new double[colCount, rowCount];
-			
-			for (int i = 0; i < input.Count()-1; i++)
-			{ 
+			double[,] numbers = new double[colCount, rowCount];
+
+			for (int i = 0; i < input.Count() - 1; i++)
+			{
 				var data = input[i].Split(' ').Where(x => double.TryParse(x, out double result)).Select(x => double.Parse(x)).ToArray();
 
-				for(int j = 0; j < data.Length; j++)
+				for (int j = 0; j < data.Length; j++)
 				{
 					numbers[j, i] = data[j];
 				}
 
 			}
 
-			char[] operations = input.Last().Replace(" ","").ToArray();
+			char[] operations = input.Last().Replace(" ", "").ToArray();
 
-			if(operations.Length != colCount)
+			if (operations.Length != colCount)
 			{ return "Operation count does not match column count."; }
 
 			List<double> results = new List<double>();
 
-			for(int colIndex = 0; colIndex < colCount; colIndex++)
+			for (int colIndex = 0; colIndex < colCount; colIndex++)
 			{
 				double colResult = numbers[colIndex, 0];
 
-				for(int rowIndex = 1; rowIndex < rowCount; rowIndex++)
+				for (int rowIndex = 1; rowIndex < rowCount; rowIndex++)
 				{
-					colResult = (operations[colIndex] == '+') ? colResult + numbers[colIndex, rowIndex] 
+					colResult = (operations[colIndex] == '+') ? colResult + numbers[colIndex, rowIndex]
 							  : (operations[colIndex] == '*') ? colResult * numbers[colIndex, rowIndex]
-								
+
 							  : throw new Exception($"operation not found\n\rcollum : {colIndex}");
 				}
 
@@ -663,24 +663,24 @@ namespace AoC25
 			var colSizeList = new List<double>();
 			var opData = lineData.Last();
 
-			while(opData.Count() < input.Last().Replace(" ","").Length )            // - colom count
+			while (opData.Count() < input.Last().Replace(" ", "").Length)            // - colom count
 			{ opData = opData.Append("").ToArray(); }
-			
-			for(int i = 0; i < opData.Length -1; i++)
+
+			for (int i = 0; i < opData.Length - 1; i++)
 			{
-				if(opData[i] != "")
-				{ 
-					for(int j = i +1; j < opData.Length; j++)
+				if (opData[i] != "")
+				{
+					for (int j = i + 1; j < opData.Length; j++)
 					{
-						if(opData[j] != "")
+						if (opData[j] != "")
 						{
 							colSizeList.Add(j - i);
-							i = j -1;
+							i = j - 1;
 							break;
 						}
 
-						if(j == opData.Length -1)
-						{ 
+						if (j == opData.Length - 1)
+						{
 							colSizeList.Add(j - i);
 							i = j;
 							break;
@@ -688,7 +688,7 @@ namespace AoC25
 					}
 				}
 
-		
+
 
 			}
 
@@ -701,9 +701,9 @@ namespace AoC25
 			for (int i = 0; i < lineData.Count - 1; i++)
 			{
 				List<string> line = new List<string>();
-			
+
 				string stringData = "";
-				
+
 				for (int j = 0; j < lineData[i].Length; j++)
 				{
 					if (lineData[i][j] == "")
@@ -712,7 +712,7 @@ namespace AoC25
 					{ stringData += lineData[i][j]; }
 
 					if (stringData.Length == colSizeList[i])
-					{ 
+					{
 						line.Add(stringData);
 						stringData = "";
 					}
@@ -723,18 +723,18 @@ namespace AoC25
 
 			var colCount = Lines[0].Count;
 			var rowCount = Lines.Count;
-			
+
 			List<double> results = new List<double>();
-			
-			for (int stringIndex = colCount-1; stringIndex >= 0; stringIndex--)
+
+			for (int stringIndex = colCount - 1; stringIndex >= 0; stringIndex--)
 			{
 				var colData = new List<double>();
 
-				for (int charIndex = (int)colSizeList[stringIndex] -1; charIndex >= 0; charIndex--)
+				for (int charIndex = (int)colSizeList[stringIndex] - 1; charIndex >= 0; charIndex--)
 				{
-					string cd = ""; 
-					
-					for(int lineIndex = 0; lineIndex < Lines.Count; lineIndex++)
+					string cd = "";
+
+					for (int lineIndex = 0; lineIndex < Lines.Count; lineIndex++)
 					{
 						cd += Lines[lineIndex][stringIndex][charIndex];
 					}
@@ -749,7 +749,7 @@ namespace AoC25
 
 				for (int i = 1; i < colData.Count; i++)
 				{
-					colResult = (operations[stringIndex] == "+") ? colResult + colData[i]	 
+					colResult = (operations[stringIndex] == "+") ? colResult + colData[i]
 							  : (operations[stringIndex] == "*") ? colResult * colData[i]
 
 					  : throw new Exception($"operation not found\n\rcollum : {stringIndex}");
@@ -769,7 +769,7 @@ namespace AoC25
 
 	}
 
-	public static class Day7
+	public class Day7 
 	{
 		public static string Run(int partIndex)
 		{
@@ -803,20 +803,20 @@ namespace AoC25
 
 			//List<(int x, int y)> beamLocations = new List<(int x, int y)> { (input.First().IndexOf('S'),0) };
 
-			if(input.First().IndexOf('S') == -1)
+			if (input.First().IndexOf('S') == -1)
 			{ return " Start location not found."; }
 
-			List<int>beamLocation = new List<int> { input.First().IndexOf('S') };
+			List<int> beamLocation = new List<int> { input.First().IndexOf('S') };
 
 			int splitCout = 0;
 
-			for(int i = 0; i < input.Count()-1; i++)
+			for (int i = 0; i < input.Count() - 1; i++)
 			{
 				List<int> newLocations = new List<int>();
 
 				foreach (var beam in beamLocation)
 				{
-					if(input[i+1][beam] == '^')
+					if (input[i + 1][beam] == '^')
 					{
 						splitCout++;
 						newLocations.Add(beam - 1);
@@ -824,9 +824,9 @@ namespace AoC25
 					}
 					else
 					{ newLocations.Add(beam); }
-					
+
 				}
-				
+
 				beamLocation = newLocations.Distinct().ToList();
 			}
 
@@ -836,6 +836,19 @@ namespace AoC25
 		{
 
 			return "not implemented yet.";
+
+			// help sheet
+
+			// .......S.......
+			// .......1.......
+			// ......1^1......
+			// ......1.1......
+			// .....1^2^1.....
+			// .....1.2.1.....
+			// ....1^3^3^1....
+			// ....1.2.3.1....
+			// ...1^3^231^1...
+			// Each branch is an addition of the previous two.
 
 			var input = (runTestData) ? Code.GetTestData(7) : Code.GetData(7);
 
@@ -893,29 +906,67 @@ namespace AoC25
 			}
 		}
 
-		private static double CalculateDistance((double x, double y, double z)p1,(double x, double y, double z)p2 )
-		{
-			double deltaX = p2.x - p1.x;
-			double deltaY = p2.y - p1.y;
-			double deltaZ = p2.z - p1.z;
 
-			double distance = Math.Sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
-			
-			return distance;
-		}
-		private struct Box
+		private class Box
 		{
 			public double Id { get; }
 			public (double x, double y, double z) Location { get; }
 			public bool IsConnected { get; set; }
-			
-			public Box(double id, (double x, double y, double z)location)
+
+			public (double x, double y, double z)? ClosestLocation { get; set; }
+			public double? ClosestBoxDistence { get; set; }
+
+
+			public Box(double id, (double x, double y, double z) location)
 			{
 				Id = id;
 				Location = location;
-				IsConnected = false;	
+				IsConnected = false;
+				ClosestLocation = null;
+				ClosestBoxDistence = null;
+
 			}
-			
+
+			public static double CalculateDistance((double x, double y, double z) p1, (double x, double y, double z) p2)
+			{
+				double deltaX = p2.x - p1.x;
+				double deltaY = p2.y - p1.y;
+				double deltaZ = p2.z - p1.z;
+
+				double distance = Math.Sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
+
+				return distance;
+			}
+
+			public bool SetClosestBox(List<Box> boxes)
+			{
+				ClosestLocation = null;
+				ClosestBoxDistence = null;
+
+				var minDistance = double.MaxValue;
+				var minBoxId = -1;
+
+				for (int b2 = 0; b2 < boxes.Count(); b2++)
+				{
+					if (Location == boxes[b2].Location)
+					{ continue; }
+
+					var distance = Box.CalculateDistance(Location, boxes[b2].Location);
+
+					if (distance < minDistance)
+					{
+						minDistance = distance;
+						minBoxId = b2;
+					}
+				}
+
+				this.ClosestLocation = boxes[minBoxId].Location;
+				this.ClosestBoxDistence = minDistance;
+
+				return (ClosestLocation != null);
+
+			}
+
 		}
 
 		private static string PartOne(bool runTestData)
@@ -933,9 +984,42 @@ namespace AoC25
 
 			List<Box> boxes = new List<Box>();
 
-			for(int i = 0; i < boxLocations.Count; i++)
-			{ boxes.Add( new Box(i, boxLocations[i]) ); }
+			for (int i = 0; i < boxLocations.Count; i++)
+			{ boxes.Add(new Box(i, boxLocations[i])); }
 
+			for (int b1 = 0; b1 < boxes.Count; b1++)
+			{
+				bool set = boxes[b1].SetClosestBox(boxes);
+
+				if (!set)
+				{ throw new Exception($"Box location ({boxes[b1].Location.x},{boxes[b1].Location.y},{boxes[b1].Location.z}) closest box could not be found."); }
+
+			}
+
+			boxes = (List<Box>)boxes.OrderBy(x => x.ClosestBoxDistence);
+
+			int conCount = (runTestData) ? 10 : 1000;
+			
+			//build circits
+
+			//List<List<(Box,Box)>> circits = new List<List<(Box,Box)>>();
+
+			//for(int i = 0; i < conCount; i++)
+			//{
+			//	(Box b1, Box b2) conection = (boxes[i], boxes.Find(x => x.Location == boxes[i].ClosestLocation));
+
+			//	if(!circits.All(x => x.Contains(conection)))
+			//	{
+			//		circits.Add(new List<(Box, Box)>() { conection });
+			//	}
+			//	//else if()
+
+			//}
+
+			//circits = circits.OrderBy(x => x.Count()).ToList();
+
+
+			//multipy top 3 circits
 
 			return "part one not implemented yet.";
 		}
@@ -972,8 +1056,58 @@ namespace AoC25
 		{
 			var input = (runTestData) ? Code.GetTestData(9) : Code.GetData(9);
 
-			return "part one not implemented yet.";
+			var rtList = input
+				.Select(
+						line => line.Split(',')
+						.Select(int.Parse)
+						.ToArray()
+						)
+				.Select(p => (x: p[0], y: p[1]))
+				.ToList();
+
+			var dataList = new List<(((int x, int y)t1,(int x, int y)t2)points,int area)>();
+
+			foreach ( var r in rtList )
+			{
+				var data = FindLargestPair(r, rtList);
+
+				if(!dataList.Any(x => x.points == data.points) && !dataList.Any(x => x.points == (data.points.t2,data.points.t1)))
+				{
+					dataList.Add(data);
+				}
+			}
+
+			return dataList.Select(x => x.area).Max().ToString();
+		
+			// Test result : 50
+		
 		}
+
+		private static (((int x, int y)t1,(int x, int y)t2)points,int area) FindLargestPair((int x, int y)r,List<(int x,int y)>rtList)
+		{
+			int aCache = 0;
+			int tCache = -1;
+			
+			for (int t = 0; t < rtList.Count; t++)
+			{
+				if(r == rtList[t]) { continue; }
+
+				var l = (Math.Max(r.x, rtList[t].x)) - (Math.Min(r.x, rtList[t].x))+1;
+				var h = (Math.Max(r.y, rtList[t].y)) - (Math.Min(r.y, rtList[t].y))+1;
+
+					var a = l * h;
+
+					if(a > aCache)
+					{
+						aCache = a;
+						tCache = t;
+					}
+
+				}
+
+			return ((r,(rtList[tCache].x, rtList[tCache].y)), aCache);
+		}
+
 		private static string PartTwo(bool runTestData)
 		{
 			return "part two not implemented yet.";
