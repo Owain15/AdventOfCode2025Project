@@ -996,32 +996,60 @@ namespace AoC25
 
 			}
 
-			boxes = (List<Box>)boxes.OrderBy(x => x.ClosestBoxDistence);
+			boxes = boxes.OrderBy(x => x.ClosestBoxDistence).ToList();
 
 			int conCount = (runTestData) ? 10 : 1000;
 			
 			//build circits
 
-			//List<List<(Box,Box)>> circits = new List<List<(Box,Box)>>();
+			List<List<(Box b1, Box b2)>> circits = new List<List<(Box,Box)>>();
 
-			//for(int i = 0; i < conCount; i++)
-			//{
-			//	(Box b1, Box b2) conection = (boxes[i], boxes.Find(x => x.Location == boxes[i].ClosestLocation));
+			for(int cc = 0; cc < conCount; cc++)
+				for(int i = 0; i < boxes.Count; i++)
+				{
 
-			//	if(!circits.All(x => x.Contains(conection)))
-			//	{
-			//		circits.Add(new List<(Box, Box)>() { conection });
-			//	}
-			//	//else if()
+					(Box b1, Box b2) conection = (boxes[i], boxes.Find(x => x.Location == boxes[i].ClosestLocation));
 
-			//}
+					int b1Index = circits.FindIndex(c => c.Any(p => p.b1 == conection.b1 || p.b2 == conection.b1));
+					int b2Index = circits.FindIndex(c => c.Any(p => p.b1 == conection.b2 || p.b2 == conection.b2));
 
-			//circits = circits.OrderBy(x => x.Count()).ToList();
+
+					//both boxes are within the same circit       //may need better check to see if exact connection exists 
+					if (b1Index == b2Index && b1Index > -1)
+					{ continue; }
+
+					//nither box is currently in a circet
+					if(b1Index == -1 && b2Index == -1)
+					{ circits.Add(new List<(Box b1, Box b2)> { conection }); }
+
+
+					// one box is alredy within a circit
+					if (b1Index > -1 && b2Index == -1)
+					{
+						circits[b1Index].Add(conection);
+					}
+
+					if (b1Index == -1 && b2Index > -1)
+					{
+						circits[b2Index].Add(conection);
+					}
+
+					//if each box is already within seperate circits. 
+					if(b1Index > -1 && b2Index > -1 && b1Index != b2Index)
+					{
+						circits[b1Index].Add(conection);
+						circits[b1Index].AddRange(circits[b2Index]);
+						circits.RemoveAt(b2Index);
+					}
+
+				}
+
+			circits = circits.OrderByDescending(x => x.Count()).ToList();
 
 
 			//multipy top 3 circits
 
-			return "part one not implemented yet.";
+			return (circits[0].Count * circits[1].Count * circits[2].Count).ToString();
 		}
 		private static string PartTwo(bool runTestData)
 		{
@@ -1059,13 +1087,13 @@ namespace AoC25
 			var rtList = input
 				.Select(
 						line => line.Split(',')
-						.Select(int.Parse)
+						.Select(long.Parse)
 						.ToArray()
 						)
 				.Select(p => (x: p[0], y: p[1]))
 				.ToList();
 
-			var dataList = new List<(((int x, int y)t1,(int x, int y)t2)points,int area)>();
+			var dataList = new List<(((long x, long y)t1,(long x, long y)t2)points,long area)>();
 
 			foreach ( var r in rtList )
 			{
@@ -1083,19 +1111,19 @@ namespace AoC25
 		
 		}
 
-		private static (((int x, int y)t1,(int x, int y)t2)points,int area) FindLargestPair((int x, int y)r,List<(int x,int y)>rtList)
+		private static (((long x, long y)t1,(long x, long y)t2)points,long area) FindLargestPair((long x, long y)r,List<(long x, long y)>rtList)
 		{
-			int aCache = 0;
+			long aCache = 0;
 			int tCache = -1;
 			
 			for (int t = 0; t < rtList.Count; t++)
 			{
 				if(r == rtList[t]) { continue; }
 
-				var l = (Math.Max(r.x, rtList[t].x)) - (Math.Min(r.x, rtList[t].x))+1;
-				var h = (Math.Max(r.y, rtList[t].y)) - (Math.Min(r.y, rtList[t].y))+1;
+				long l = (Math.Max(r.x, rtList[t].x)) - (Math.Min(r.x, rtList[t].x))+1;
+				long h = (Math.Max(r.y, rtList[t].y)) - (Math.Min(r.y, rtList[t].y))+1;
 
-					var a = l * h;
+					long a = l * h;
 
 					if(a > aCache)
 					{
@@ -1110,11 +1138,94 @@ namespace AoC25
 
 		private static string PartTwo(bool runTestData)
 		{
+			var input = (runTestData) ? Code.GetTestData(9) : Code.GetData(9);
+
+			var rtList = input
+				.Select(
+						line => line.Split(',')
+						.Select(long.Parse)
+						.ToArray()
+						)
+				.Select(p => (x: p[0], y: p[1]))
+				.ToList();
+
+			//var boundery = ? 
+
 			return "part two not implemented yet.";
 		}
 
 
 	}
+
+	public static class Day10
+	{
+		public static string Run(int partIndex)
+		{
+			switch (partIndex)
+			{
+				case 1: return PartOne(false);
+				case 2: return PartTwo(false);
+				default: return "Invalid part index.";
+			}
+		}
+		public static string Run(int partIndex, bool runTestData)
+		{
+			switch (partIndex)
+			{
+				case 1: return PartOne(runTestData);
+				case 2: return PartTwo(runTestData);
+				default: return "Invalid part index.";
+			}
+		}
+
+		private static string PartOne(bool runTestData)
+		{
+			var input = (runTestData) ? Code.GetTestData(10) : Code.GetData(10);
+
+			return "part one not implemented yet.";
+		}
+		private static string PartTwo(bool runTestData)
+		{
+			return "part two not implemented yet.";
+		}
+
+
+	}
+
+	//public static class Day
+	//{
+	//	public static string Run(int partIndex)
+	//	{
+	//		switch (partIndex)
+	//		{
+	//			case 1: return PartOne(false);
+	//			case 2: return PartTwo(false);
+	//			default: return "Invalid part index.";
+	//		}
+	//	}
+	//	public static string Run(int partIndex, bool runTestData)
+	//	{
+	//		switch (partIndex)
+	//		{
+	//			case 1: return PartOne(runTestData);
+	//			case 2: return PartTwo(runTestData);
+	//			default: return "Invalid part index.";
+	//		}
+	//	}
+
+	//	private static string PartOne(bool runTestData)
+	//	{
+	//		var input = (runTestData) ? Code.GetTestData() : Code.GetData();
+
+	//		return "part one not implemented yet.";
+	//	}
+	//	private static string PartTwo(bool runTestData)
+	//	{
+	//		return "part two not implemented yet.";
+	//	}
+
+
+	//}
 
 	//public static class Day
 	//{

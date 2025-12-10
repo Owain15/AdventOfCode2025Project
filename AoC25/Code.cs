@@ -44,7 +44,7 @@ namespace AoC25
 				case 7: return Day7.Run(part, runTestData);
 				case 8: return Day8.Run(part, runTestData);
 				case 9: return Day9.Run(part, runTestData);
-				//case 10: return Day10.Run(part, runTestData);
+				case 10: return Day10.Run(part, runTestData);
 				//case 11: return Day11.Run(part, runTestData);
 				//case 12: return Day12.Run(part, runTestData);
 
@@ -57,14 +57,20 @@ namespace AoC25
 		{
 			//validate input ...
 			//$(MSBuildProjectName)
-			return System.IO.File.ReadAllLines($"C:\\Users\\ojdav\\source\\repos\\AdventOfCode2025Project\\AoC25\\res\\TestData\\D{dayIndex}.txt").ToList();
+
+			//return System.IO.File.ReadAllLines($"C:\\Users\\ojdav\\source\\repos\\AdventOfCode2025Project\\AoC25\\res\\TestData\\D{dayIndex}.txt").ToList();
+			var root = System.IO.Directory.GetCurrentDirectory().Substring(0, (System.IO.Directory.GetCurrentDirectory().IndexOf("AdventOfCode2025Project\\") + 24));
+			return System.IO.File.ReadAllLines($"{root}\\AoC25\\res\\TestData\\D{dayIndex}.txt").ToList();
 		}
 
 		internal static List<string> GetData(int dayIndex)
 		{
 			//validate input ...
 
-			return System.IO.File.ReadAllLines($"C:\\Users\\ojdav\\source\\repos\\AdventOfCode2025Project\\AoC25\\res\\Data\\D{dayIndex}.txt").ToList();
+			//return System.IO.File.ReadAllLines($"C:\\Users\\ojdav\\source\\repos\\AdventOfCode2025Project\\AoC25\\res\\Data\\D{dayIndex}.txt").ToList();
+			var root = System.IO.Directory.GetCurrentDirectory().Substring(0, (System.IO.Directory.GetCurrentDirectory().IndexOf("AdventOfCode2025Project\\") + 24));
+			return System.IO.File.ReadAllLines($"{root}\\AoC25\\res\\Data\\D{dayIndex}.txt").ToList();
+
 		}
 
 		//	internal interface IDay
