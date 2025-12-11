@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Xml.Schema;
 
 namespace AoC25
 {
@@ -1182,7 +1183,61 @@ namespace AoC25
 		{
 			var input = (runTestData) ? Code.GetTestData(10) : Code.GetData(10);
 
-			return "part one not implemented yet.";
+			// unpack input
+			List<(string Indicators, List<List<string>> WireSchmatics, List<string> Joltages)> machines = 
+				new List<(string, List<List<string>> , List<string> )>();
+
+			for(int i = 0; i < input.Count; i++)
+			{
+				var line = input[i];
+
+				var indicators = line.Substring(line.IndexOf("[")+1,(line.IndexOf("]") - line.IndexOf("[")-1));
+				
+				List<List<string>> wireSchmatics = 
+					line.Substring(line.IndexOf("("), (line.LastIndexOf(")") - line.IndexOf("(")))
+					.Split(" ")
+					.Select(x => x.Replace("(", ""))
+					.Select(x => x.Replace(")", ""))
+					.Select(x => x.Split(",").ToList())
+					.ToList()
+					;
+
+				var joltages = line.Substring(line.IndexOf("{") + 1, (line.IndexOf("}") - line.IndexOf("{") -1))
+					.Split(",")
+					.ToList();
+
+				machines.Add((indicators, wireSchmatics, joltages));
+			}
+
+			List<long> results = new List<long>();
+
+			//foreach machine, find shortes route, cache result
+
+			foreach (var machine in machines)
+			{
+				long result = 0;
+
+				int indicatorBitData;
+				int.TryParse(machine.Indicators, out indicatorBitData);
+
+
+				results.Add(result);
+
+			}
+
+			return results.Sum().ToString();
+
+			//	var rtList = input
+				//.Select(
+				//		line => line.Split(',')
+				//		.Select(long.Parse)
+				//		.ToArray()
+				//		)
+				//.Select(p => (x: p[0], y: p[1]))
+				//.ToList();
+
+			// Test result : 7
+
 		}
 		private static string PartTwo(bool runTestData)
 		{
