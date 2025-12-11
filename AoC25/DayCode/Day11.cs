@@ -30,7 +30,24 @@ namespace AoC25.Calendar
 		{
 			var input = (runTestData) ? Code.GetTestData(11) : Code.GetData(11);
 
-			return "part one not implemented yet.";
+			// network = new List<(int ID , List<string>)>(); 
+
+			var network = input
+				.Select
+				(
+					line =>
+					line.Split(":")
+					.ToArray()
+					
+				)
+				.Select
+				(
+					x => (ID: x[0], Outputs: x[1].Split(" ", StringSplitOptions.RemoveEmptyEntries).ToList())
+				)
+				.ToList();
+			
+
+            return "part one not implemented yet.";
 		}
 		private static string PartTwo(bool runTestData)
 		{
