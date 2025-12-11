@@ -35,18 +35,18 @@ namespace AoC25
 		{
 			switch(day)
 			{
-				//case 1: return Day1.Run(part, runTestData);
-				//case 2: return Day2.Run(part, runTestData);
-				case 3: return Day3.Run(part, runTestData);
-				case 4: return Day4.Run(part, runTestData);
-				case 5: return Day5.Run(part, runTestData);
-				case 6: return Day6.Run(part, runTestData);
-				case 7: return Day7.Run(part, runTestData);
-				case 8: return Day8.Run(part, runTestData);
-				case 9: return Day9.Run(part, runTestData);
-				case 10: return Day10.Run(part, runTestData);
-				//case 11: return Day11.Run(part, runTestData);
-				//case 12: return Day12.Run(part, runTestData);
+				case 1:  return Calendar.Day1. Run(part, runTestData);
+				case 2:  return Calendar.Day2. Run(part, runTestData);
+				case 3:  return Calendar.Day3. Run(part, runTestData);
+				case 4:  return Calendar.Day4. Run(part, runTestData);
+				case 5:  return Calendar.Day5. Run(part, runTestData);
+				case 6:  return Calendar.Day6. Run(part, runTestData);
+				case 7:  return Calendar.Day7. Run(part, runTestData);
+				case 8:  return Calendar.Day8. Run(part, runTestData);
+				case 9:  return Calendar.Day9. Run(part, runTestData);
+				case 10: return Calendar.Day10.Run(part, runTestData);
+				case 11: return Calendar.Day11.Run(part, runTestData);
+				case 12: return Calendar.Day12.Run(part, runTestData);
 
 				default: return "Invalid day index.";
 			}

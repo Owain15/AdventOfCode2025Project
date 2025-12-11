@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="DayCode\" />
     <Folder Include="res\Data\" />
     <Folder Include="res\TestData\" />
   </ItemGroup>

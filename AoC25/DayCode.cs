@@ -581,6 +581,7 @@ namespace AoC25
 			return (range1.start <= range2.finish) && (range2.start <= range1.finish);
 
 		}
+	
 	}
 
 	public static class Day6
