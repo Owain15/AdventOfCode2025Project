@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Runtime.Intrinsics.Arm;
 using System.Text;
 
 namespace AoC25.Calendar
@@ -57,13 +58,25 @@ namespace AoC25.Calendar
 
         private static string PartTwo(bool runTestData)
 		{
-			var input = (runTestData) ? Code.GetTestData(11) : Code.GetData(11);
+			//var input = (runTestData) ? Code.GetTestData(11) : Code.GetData(11);
+			var input = ("svr: aaa bbb\naaa: fft\nfft: ccc\nbbb: tty\ntty: ccc\nccc: ddd eee\nddd: hub\nhub: fff\neee: dac\ndac: fff\nfff: ggg hhh\nggg: out\nhhh: out").Split("\n").ToList();
 
-			return "part two not implemented yet.";
-		}
+            // network = new List<(int ID , List<string>)>(); 
+            var network = input
+                .Select( line => line.Split(":").ToArray())
+                .Select( x => (ID: x[0], Outputs: x[1].Split(" ", StringSplitOptions.RemoveEmptyEntries).ToList()))
+                .ToList();
+
+			string startNode = "svr";
+			List<string> visitedNodes = new List<string>();
+ 
+            return GetValidOutputPathCount(startNode).ToString();
+
+            // test result : only 2 paths from svr to out visit both dac and fft
+        }
 
 
-		private static long GetOutputPathsCount(List<string> outputs, List<(string ID,List<string>Outputs)> Network)
+        private static long GetOutputPathsCount(List<string> outputs, List<(string ID,List<string>Outputs)> Network)
 		{
 			long result = 0;
 
@@ -81,6 +94,12 @@ namespace AoC25.Calendar
 
 			return result;
         }
+
+		private static long GetValidOutputPathCount(string currentNode)
+			{
+			
+				return 0;
+            }
 
 
 	}
