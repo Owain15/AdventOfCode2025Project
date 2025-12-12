@@ -29,7 +29,14 @@ namespace AoC25.Calendar
 		{
 			var input = (runTestData) ? Code.GetTestData(12) : Code.GetData(12);
 
-			return "part one not implemented yet.";
+			
+			var data = input
+				.Where(line => !string.IsNullOrWhiteSpace(line))
+                ;
+
+            return "part one not implemented yet.";
+
+			//Test result : 2
 		}
 		private static string PartTwo(bool runTestData)
 		{
