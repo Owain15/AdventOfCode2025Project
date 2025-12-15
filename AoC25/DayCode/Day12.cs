@@ -31,8 +31,10 @@ namespace AoC25.Calendar
 
 			
 			var data = input
-				.Where(line => !string.IsNullOrWhiteSpace(line))
-                ;
+			.Aggregate((a, b) => a + "\n" + b)
+			.Split("\n\n")
+			.ToList()
+			;
 
             return "part one not implemented yet.";
 
