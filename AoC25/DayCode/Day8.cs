@@ -190,6 +190,8 @@ namespace AoC25.Calendar
 
 		private static List<List<Box>> HandleConnection(List<List<Box>>Circits,(Box b1, Box b2)Connection)
 		{
+			//check work
+
 			//Ether box cant be found
 			var b1CircitIndex = Circits.FindIndex(x => x.Any(xx => xx == Connection.b1));
             var b2CircitIndex = Circits.FindIndex(x => x.Any(xx => xx == Connection.b2));

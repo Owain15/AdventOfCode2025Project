@@ -31,8 +31,12 @@ namespace AoC25.Calendar
 
 			
 			var data = input
-				.Where(line => !string.IsNullOrWhiteSpace(line))
-                ;
+			.Aggregate((a, b) => a + "\n" + b)
+			.Split("\n\n")
+			.ToArray();
+
+			List<char[,]> shapes = new List<char[,]> ();
+			(List<(long x, long y)> regions, int[] shapeCount) refindData = new(new List<(long, long)>(), new int[3]);
 
             return "part one not implemented yet.";
 
