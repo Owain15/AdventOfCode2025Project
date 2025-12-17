@@ -87,7 +87,26 @@ namespace AoC25.Calendar
 
 			}
 
-		}
+			public static bool IsConnectionInCircit((Box b1, Box b2)connection, List<(Box b1, Box b2)> circit)
+			{
+                if (circit == null || circit.Count == 0)
+                { return false; }
+
+                // Compare by Id to determine if the same boxes appear in either order.
+                for (int i = 0; i < circit.Count; i++)
+                {
+                    var c = circit[i];
+
+                    bool sameOrder = c.b1.Id == connection.b1.Id && c.b2.Id == connection.b2.Id;
+                    bool reverseOrder = c.b1.Id == connection.b2.Id && c.b2.Id == connection.b1.Id;
+
+                    if (sameOrder || reverseOrder)
+                    { return true; }
+                }
+
+                return false;
+            }
+        }
 
 		private static string PartOne(bool runTestData)
 		{
@@ -120,57 +139,83 @@ namespace AoC25.Calendar
 
 			int conCount = (runTestData) ? 10 : 1000;
 
+			
+			var conList = new List<(Box b1, Box b2)>();
+            
+			int cc = 0;
+            //for(int cc = 0; cc < conCount; cc++ )
+            for (int i = 0; i < boxes.Count; i++)
+			{
+				(Box b1, Box b2) connection = (boxes[i], boxes.First(b => b.Location == boxes[i].ClosestLocation));
+
+                if (Box.IsConnectionInCircit(connection,conList))
+                {continue; }
+
+				conList.Add(connection);
+				cc++;
+
+				if(cc >= conCount)
+				{ break; }
+            }
+			
 			//build circits
+			var circits = new List<List<Box>>();
 
-			List<List<(Box b1, Box b2)>> circits = new List<List<(Box, Box)>>();
+			foreach(var box in boxes)
+			{ 
+				circits.Add(new List<Box>() { box });
+			}
 
-			for (int cc = 0; cc < conCount; cc++)
-				for (int i = 0; i < boxes.Count; i++)
-				{
+			foreach(var connection in conList)
+			{
 
-					(Box b1, Box b2) conection = (boxes[i], boxes.Find(x => x.Location == boxes[i].ClosestLocation));
-
-					int b1Index = circits.FindIndex(c => c.Any(p => p.b1 == conection.b1 || p.b2 == conection.b1));
-					int b2Index = circits.FindIndex(c => c.Any(p => p.b1 == conection.b2 || p.b2 == conection.b2));
-
-
-					//both boxes are within the same circit       //may need better check to see if exact connection exists 
-					if (b1Index == b2Index && b1Index > -1)
-					{ continue; }
-
-					//nither box is currently in a circet
-					if (b1Index == -1 && b2Index == -1)
-					{ circits.Add(new List<(Box b1, Box b2)> { conection }); }
+				circits = HandleConnection(circits,connection);
+                //circit contains nether or both box
 
 
-					// one box is alredy within a circit
-					if (b1Index > -1 && b2Index == -1)
-					{
-						circits[b1Index].Add(conection);
-					}
+                //circit contains one box
 
-					if (b1Index == -1 && b2Index > -1)
-					{
-						circits[b2Index].Add(conection);
-					}
-
-					//if each box is already within seperate circits. 
-					if (b1Index > -1 && b2Index > -1 && b1Index != b2Index)
-					{
-						circits[b1Index].Add(conection);
-						circits[b1Index].AddRange(circits[b2Index]);
-						circits.RemoveAt(b2Index);
-					}
-
-				}
-
-			circits = circits.OrderByDescending(x => x.Count()).ToList();
+            }
 
 
-			//multipy top 3 circits
+            //multipy top 3 circits
 
-			return (circits[0].Count * circits[1].Count * circits[2].Count).ToString();
+            if (circits.Count<3)
+			{ return "Insufficient data to find result."; }
+
+            circits = circits.OrderByDescending(x => x.Count()).ToList();
+
+            return (circits[0].Count()* circits[1].Count() * circits[2].Count()).ToString();
 		}
+
+		private static List<List<Box>> HandleConnection(List<List<Box>>Circits,(Box b1, Box b2)Connection)
+		{
+			//Ether box cant be found
+			var b1CircitIndex = Circits.FindIndex(x => x.Any(xx => xx == Connection.b1));
+            var b2CircitIndex = Circits.FindIndex(x => x.Any(xx => xx == Connection.b2));
+
+			if(b1CircitIndex < 0 || b2CircitIndex < 0)
+			{ throw new Exception($"Connection ({Connection.b1.Id} ,{Connection.b2.Id}) could not be found."); }
+
+            //both in the same circit (Do nothing?)
+            if (b1CircitIndex == b2CircitIndex)
+            { return Circits; }
+
+            //in seperat circits
+            if (b1CircitIndex != b2CircitIndex)
+			{
+				var circit = Circits[b2CircitIndex];
+                Circits[b1CircitIndex].AddRange(circit);
+                Circits[b1CircitIndex] = Circits[b1CircitIndex].Distinct().ToList();
+				Circits.RemoveAt(b2CircitIndex);
+			}
+
+            return Circits;
+		}
+
+
+
+
 		private static string PartTwo(bool runTestData)
 		{
 			return "part two not implemented yet.";

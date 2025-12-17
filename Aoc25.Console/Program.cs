@@ -1,6 +1,6 @@
 ﻿
 
-int day = 12;
+int day = 8;
 int part = 1;
 bool test = true;
 
