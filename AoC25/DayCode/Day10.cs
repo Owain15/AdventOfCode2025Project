@@ -130,13 +130,120 @@ namespace AoC25.Calendar
 
 		private static string PartTwo(bool runTestData)
 		{
-			var input = (runTestData) ? Code.GetTestData(10) : Code.GetData(10);
 
-			return "part two not implemented yet.";
+			return "not yet working.";
+
+			var input = (runTestData) ? Code.GetTestData(10) : Code.GetData(10);
+			// desired output,  buttns        ,     joltages
+			//[.##.] (3) (1,3) (2) (2,3) (0,2) (0,1) {3,5,4,7}
+			var machines = input
+				.Select
+				(x =>
+					(
+						//DesiredOutput: Regex.Match(x, @"\[.*\]").Value.Replace("[", "").Replace("]", ""),
+						 Buttons: Regex.Match(x, @"\(.*\)").Value.Replace("(", "").Replace(")", "").Split(" ").Select(xx => xx.Split(",")).ToArray()
+						, Joltages: Regex.Match(x, @"\{.*\}").Value.Replace("{", "").Replace("}", "").Split(",").Select(x => int.Parse(x)).ToArray()
+					)
+				)
+				.ToList();
+
+			// posibly change to a long once debugging is complete
+			var shotestRoutePerMachine = new List<long>();
+
+			// try changing to LINQ
+			//int machineIndex = 0;
+			foreach (var machine in machines)
+			{
+				// Convert machine.Buttons to list of BitArray
+				var buttons = new List<List<int>>();
+				foreach (var button in machine.Buttons)
+				{
+					var buttonData = new List<int>();
+					foreach (var data in button)
+					{
+						//var d = -1;
+						if(!int.TryParse(data,out var d))
+						{ throw new Exception("Invalid button data."); }
+					
+						buttonData.Add(d);
+					}
+
+					buttons.Add(buttonData);
+				}
+
+
+				shotestRoutePerMachine.Add(FindShortestRouteJoltage(machine.Joltages, buttons));
+
+			}
+
+
+
+			return shotestRoutePerMachine.Sum().ToString();
 		}
 
+		private static long FindShortestRouteJoltage(int[]targetJoltages, List<List<int>> buttons)
+		{
+			//initalize new output
+			var output = new int[targetJoltages.Count()];
+
+			List<int[]> visitedStats = new List<int[]>();
+			List<int[]> stateList = new List<int[]>();
+			stateList.Add(output);
+			visitedStats.Add(output);
+
+
+			long moveCount = 0;
+
+			while (!stateList.Contains(targetJoltages))
+			{
+				var newStateList = new List<int[]>();
+
+				foreach (var state in stateList)
+					foreach (var button in buttons)
+					{
+						var nextState = (int[])state.Clone();
+
+						foreach(var index in button)
+						{
+							nextState[index]++;
+						}
+						
+
+
+						if (!visitedStats.Contains(nextState))
+						{
+
+							bool nextStateExceedsTarget = false;
+
+							for(int i = 0;  i < nextState.Length; i++)
+							{
+								if (nextState[i]> targetJoltages[i])
+								{ nextStateExceedsTarget = true; break; }
+							}
+
+							if (!nextStateExceedsTarget)
+							{
+								newStateList.Add(nextState);
+								visitedStats.Add(nextState);
+							}
+						}
+					}
+
+				stateList = newStateList;
+				moveCount++;
+
+				if (stateList.Count == 0)
+				{ throw new Exception("no route found"); }
+
+			}
+
+			return moveCount;//stateList.Count-1;
+		}
 
 	}
+
+
+
 	public static class BitArrayExtention
 	{
 			public static bool IsEqualTo(this BitArray bit1, BitArray bit2)
