@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Xml.Schema;
 
 namespace AoC25.Calendar
 {
@@ -110,6 +111,96 @@ namespace AoC25.Calendar
 
 		private static string PartOne(bool runTestData)
 		{
+			var input = (runTestData) ? Code.GetTestData(8) : Code.GetData(8);
+
+			var boxLocations = input
+			.Select(line => line.Split(',')
+			.Select(double.Parse)
+			.ToArray())
+			.Where(p => p.Length == 3)
+			.Select(p => (x: p[0], y: p[1], z: p[2]))
+			.ToList();
+
+			List<((double x, double y, double z) b1, (double x, double y, double z) b2, double distence)> connectionData = new List<((double x, double y, double z), (double x, double y, double z), double)>();
+
+			foreach (var box in boxLocations)
+			{
+				(var closestBox, var distence) = FindClostestBox(box, boxLocations,connectionData);
+
+				if (!connectionData.Any(c => (c.b1 == box && c.b2 == closestBox) || (c.b1 == closestBox && c.b2 == box))) { connectionData.Add((box, closestBox, distence)); }
+			}
+
+			connectionData = connectionData.OrderBy(x => x.distence).ToList();
+
+			List<List<(double x, double y, double z)>> Circits = new List<List<(double x, double y, double z)>>();
+			foreach (var box in boxLocations)
+			{ Circits.Add(new List<(double x, double y, double z)> { box }); }
+
+			int conCount = (runTestData) ? 10 : 1000;
+
+			for(int i = 0; i < conCount; i++)
+			{
+				var conData = connectionData[i];
+
+				var b1Index = Circits.FindIndex(x => x.Contains(conData.b1));
+				var b2Index = Circits.FindIndex(x => x.Contains(conData.b2));
+
+				if(b1Index == b2Index)
+				{ continue; }
+
+				Circits[b1Index].AddRange(Circits[b2Index]);
+				Circits.RemoveAt(b2Index);
+
+			}
+
+			Circits = Circits.OrderByDescending(x => x.Count()).ToList();
+
+			return( Circits[0].Count() * Circits[1].Count() * Circits[2].Count()).ToString();
+
+			// 26650 , to low
+		}
+
+		private static ((double x, double y, double z)ClosestBox, double distence) FindClostestBox((double x, double y, double z) currentBox, List<(double x, double y, double z)> boxList, List<((double x, double y, double z) b1, (double x, double y, double z) b2, double distence)> connectionList)
+		{
+			int cBoxIndex = -1;
+			double distence = double.PositiveInfinity;
+
+			for(int i = 0; i < boxList.Count; i++) 
+			{
+				if (boxList[i] == currentBox)
+				{ continue; }
+
+				if (connectionList.Any(x => (x.b1, x.b2) == (currentBox, boxList[i])) || connectionList.Any(x => (x.b1, x.b2) == (boxList[i], currentBox)))
+				{ continue; }
+
+				var d = CalculateDistance(currentBox, boxList[i]);
+
+				if(d < distence)
+				{
+					distence = d;
+					cBoxIndex = i;
+				}
+
+			}
+
+
+			return (boxList[cBoxIndex], distence);
+
+		}
+
+		private static double CalculateDistance((double x, double y, double z) p1, (double x, double y, double z) p2)
+		{
+			double deltaX = p2.x - p1.x;
+			double deltaY = p2.y - p1.y;
+			double deltaZ = p2.z - p1.z;
+
+			double distance = Math.Sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
+
+			return distance;
+		}
+
+		private static string PartOneTest(bool runTestData)
+		{
 
 			var input = (runTestData) ? Code.GetTestData(8) : Code.GetData(8);
 
@@ -169,8 +260,9 @@ namespace AoC25.Calendar
 			foreach(var connection in conList)
 			{
 
-				circits = HandleConnection(circits,connection);
-                //circit contains nether or both box
+				(var connectionMade, var newCircitsList)= HandleConnection(circits,connection);
+               
+				//circit contains nether or both box
 
 
                 //circit contains one box
@@ -188,9 +280,10 @@ namespace AoC25.Calendar
             return (circits[0].Count()* circits[1].Count() * circits[2].Count()).ToString();
 		}
 
-		private static List<List<Box>> HandleConnection(List<List<Box>>Circits,(Box b1, Box b2)Connection)
+		private static (bool connectionMade,List<List<Box>> newCircitList) HandleConnection(List<List<Box>>Circits,(Box b1, Box b2)Connection)
 		{
 			//check work
+			bool connectionFound = false;
 
 			//Ether box cant be found
 			var b1CircitIndex = Circits.FindIndex(x => x.Any(xx => xx == Connection.b1));
@@ -201,18 +294,23 @@ namespace AoC25.Calendar
 
             //both in the same circit (Do nothing?)
             if (b1CircitIndex == b2CircitIndex)
-            { return Circits; }
+            {
+				connectionFound = true;
+				return (connectionFound, Circits);
+			}
 
             //in seperat circits
             if (b1CircitIndex != b2CircitIndex)
 			{
+				connectionFound = true;
+
 				var circit = Circits[b2CircitIndex];
                 Circits[b1CircitIndex].AddRange(circit);
                 Circits[b1CircitIndex] = Circits[b1CircitIndex].Distinct().ToList();
 				Circits.RemoveAt(b2CircitIndex);
 			}
 
-            return Circits;
+            return (connectionFound, Circits);
 		}
 
 
