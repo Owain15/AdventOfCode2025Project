@@ -101,6 +101,10 @@ namespace AoC25.Calendar
 
 		private static bool CanAllPresentsFitInRegion(((long x, long y) region, long[] shapeCount) line, List<List<string>> shapes)
 		{
+
+			//Quick test
+			return QuickTest(line.region,line.shapeCount);
+
 			bool result = false;
 
 			//Quick test
@@ -110,30 +114,46 @@ namespace AoC25.Calendar
 
 			//Do work
 
-			List<int> shapeIndexList = new List<int>();
+			//List<int> shapeIndexList = new List<int>();
 
-			for(int i= 0; i < line.shapeCount.Length; i++)
-			for(int j= 0; j < line.shapeCount[i]; j++)
-			{
-					shapeIndexList.Add(i);
-			}
+			//for(int i= 0; i < line.shapeCount.Length; i++)
+			//for(int j= 0; j < line.shapeCount[i]; j++)
+			//{
+			//		shapeIndexList.Add(i);
+			//}
 
-			//add function, combine combination to optimum new shapes?
+			////add function, combine combination to optimum new shapes?
 
-			foreach (var shapeIndex in shapeIndexList)
-			{
-				List<int> shadowShapesList = shapeIndexList;//shapeIndexList.FindIndex(shapeIndex));
-				//shapeIndexList = shadowShapesList.RemoveAt(2);
+			//foreach (var shapeIndex in shapeIndexList)
+			//{
+			//	List<int> shadowShapesList = shapeIndexList;//shapeIndexList.FindIndex(shapeIndex));
+			//	//shapeIndexList = shadowShapesList.RemoveAt(2);
 
-				var shadowGrid = shapes[shapeIndex];
+			//	var shadowGrid = shapes[shapeIndex];
 				
 
 			
-			}
+			//}
 
 
 			return true;
 			//return result;
+		}
+
+		private static bool QuickTest((long x, long y) region, long[] shapeCount)
+		{
+			long presentCount = 0;
+
+			for(var i = 0; i < shapeCount.Length; i++)
+			{
+				presentCount += shapeCount[i];
+			}
+
+			var a = (region.x * region.y);
+			var b = (presentCount * 8);
+
+
+			return (region.x * region.y) > (presentCount * 8);
 		}
 
 		private static bool PresentVolumeExceedsRegion(((long x, long y) region, long[] shapeCount) line, List<List<string>> shapes)
